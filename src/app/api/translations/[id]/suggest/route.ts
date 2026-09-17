@@ -5,7 +5,7 @@ import { getCommHubData, matchGlossaryTerms, type CommHubBrandConstant } from "@
 import { MissingApiKeyError, suggestTranslation } from "@/lib/claude";
 import { resolveAdaptationRules, matchProjectGlossaryTerms } from "@/lib/translationContext";
 
-export const maxDuration = 30;
+export const maxDuration = 45;
 
 export async function POST(
   _req: NextRequest,

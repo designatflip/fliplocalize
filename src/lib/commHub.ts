@@ -63,7 +63,10 @@ export async function getCommHubData(): Promise<{ data: CommHubData; degraded: b
   }
 
   try {
-    const res = await fetch(`${COMM_HUB_BASE_URL}/all`, { cache: "no-store" });
+    const res = await fetch(`${COMM_HUB_BASE_URL}/all`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000),
+    });
     if (!res.ok) throw new Error(`Comm Hub responded ${res.status}`);
     const json = await res.json();
     const data: CommHubData = {

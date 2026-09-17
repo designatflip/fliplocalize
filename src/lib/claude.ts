@@ -172,6 +172,7 @@ export async function suggestTranslation(input: SuggestTranslationInput): Promis
       system: [{ type: "text", text: buildSystemPrompt(input), cache_control: { type: "ephemeral" } }],
       messages: [{ role: "user", content: buildUserPrompt(input) }],
     }),
+    signal: AbortSignal.timeout(25000),
   });
 
   if (!res.ok) {
