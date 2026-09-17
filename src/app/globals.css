@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900;
+}
+
+.status-pill {
+  @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap;
+}
+.status-untranslated { @apply bg-slate-200 text-slate-600; }
+.status-draft { @apply bg-amber-100 text-amber-700; }
+.status-in_review { @apply bg-blue-100 text-blue-700; }
+.status-approved { @apply bg-emerald-100 text-emerald-700; }
+.status-exported { @apply bg-violet-100 text-violet-700; }
+
+.change-pill {
+  @apply inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide;
+}
+.change-new { @apply bg-emerald-100 text-emerald-700; }
+.change-changed { @apply bg-amber-100 text-amber-700; }
+.change-removed { @apply bg-rose-100 text-rose-700; }
+.change-unchanged { @apply bg-transparent text-transparent; }
+
+.ai-badge {
+  @apply inline-flex items-center gap-1 rounded-full bg-fuchsia-100 px-2 py-0.5 text-[10px] font-semibold text-fuchsia-700 whitespace-nowrap;
+}

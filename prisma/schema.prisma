@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // pooled (Supavisor), used by the running app
+  directUrl = env("DIRECT_URL") // direct connection, used only by Prisma CLI for migrations
+}
+
+model Project {
+  id            String   @id @default(cuid())
+  name          String
+  sourceLocale  String
+  targetLocales String // comma-separated e.g. "en-MY,en-PH"
+  localeGroup   String? // e.g. "en-variants"
+  createdAt     DateTime @default(now())
+
+  keys            StringKeyEntry[]
+  adaptationRules AdaptationRule[]
+  glossaryTerms   GlossaryTerm[]
+}
+
+model StringKeyEntry {
+  id            String    @id @default(cuid())
+  project       Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId     String
+  key           String
+  sourceText    String
+  referenceText String?
+  screen        String?
+  component     String?
+  notes         String?
+  charLimit     Int?
+  placeholders  String? // JSON-encoded string array
+  changeStatus  String    @default("new") // new | changed | unchanged | removed
+  lastChangedAt DateTime  @default(now())
+  removedAt     DateTime?
+
+  translations Translation[]
+
+  @@unique([projectId, key])
+}
+
+model Translation {
+  id          String   @id @default(cuid())
+  stringKey   StringKeyEntry @relation(fields: [stringKeyId], references: [id], onDelete: Cascade)
+  stringKeyId String
+  locale      String
+  text        String   @default("")
+  status      String   @default("untranslated") // untranslated | draft | in_review | approved | exported
+  translator  String?
+  reviewer    String?
+  aiGenerated Boolean  @default(false) // true = unreviewed AI draft, cleared on any human text edit
+  aiModel     String? // e.g. "claude-sonnet-5", null when human-authored
+  updatedAt   DateTime @updatedAt
+
+  history  TranslationHistory[]
+  comments Comment[]
+
+  @@unique([stringKeyId, locale])
+}
+
+model TranslationHistory {
+  id            String      @id @default(cuid())
+  translation   Translation @relation(fields: [translationId], references: [id], onDelete: Cascade)
+  translationId String
+  text          String
+  by            String?
+  at            DateTime    @default(now())
+}
+
+model Comment {
+  id            String      @id @default(cuid())
+  translation   Translation @relation(fields: [translationId], references: [id], onDelete: Cascade)
+  translationId String
+  author        String?
+  text          String
+  createdAt     DateTime    @default(now())
+}
+
+model AdaptationRule {
+  id          String  @id @default(cuid())
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   String
+  localeGroup String
+  dimension   String
+  valuesJson  String // JSON-encoded map: { "en-MY": "...", "en-PH": "..." }
+  sortOrder   Int     @default(0)
+}
+
+model GlossaryTerm {
+  id                  String  @id @default(cuid())
+  project             Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId           String
+  term                String
+  locale              String
+  approvedTranslation String
+  notes               String?
+}
