@@ -25,6 +25,7 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
   const [suggestingIds, setSuggestingIds] = useState<Set<string>>(new Set());
   const [suggestError, setSuggestError] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState(false);
 
   const load = useCallback(() => {
     setLoadError(null);
@@ -109,6 +110,20 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
     load();
   }
 
+  async function renameProject(name: string) {
+    if (!project || !name.trim() || name.trim() === project.name) {
+      setEditingName(false);
+      return;
+    }
+    await fetch(`/api/projects/${projectId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    });
+    setEditingName(false);
+    load();
+  }
+
   function exportLocale(locale: string, mode: "approved" | "all") {
     window.open(`/api/projects/${projectId}/export?locale=${encodeURIComponent(locale)}&mode=${mode}`, "_blank");
     setTimeout(load, 800);
@@ -142,7 +157,26 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
       <div className="flex items-start justify-between">
         <div>
           <Link href="/" className="text-xs text-slate-400 hover:text-slate-600">← All projects</Link>
-          <h1 className="mt-1 text-xl font-semibold">{project.name}</h1>
+          {editingName ? (
+            <input
+              autoFocus
+              defaultValue={project.name}
+              onBlur={(e) => renameProject(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") e.currentTarget.blur();
+                if (e.key === "Escape") setEditingName(false);
+              }}
+              className="mt-1 w-full max-w-md rounded-md border border-slate-300 px-2 py-0.5 text-xl font-semibold"
+            />
+          ) : (
+            <h1
+              onClick={() => setEditingName(true)}
+              title="Click to rename"
+              className="mt-1 cursor-text text-xl font-semibold hover:bg-slate-100 rounded-md px-2 -mx-2 py-0.5"
+            >
+              {project.name}
+            </h1>
+          )}
           <p className="mt-1 text-xs text-slate-500">
             {project.sourceLocale} → {project.targetLocales.join(", ")}
             {project.localeGroup ? ` · ${project.localeGroup}` : ""} · {activeKeys.length} keys
@@ -218,7 +252,8 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
           placeholder="Search key, source, or reference text…"
           className="w-72 rounded-md border border-slate-300 px-3 py-1.5 text-sm"
         />
-        <div className="flex gap-1">
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs text-slate-400">Since last import:</span>
           {CHANGE_FILTERS.map((f) => (
             <button
               key={f}

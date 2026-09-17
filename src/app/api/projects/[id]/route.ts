@@ -34,6 +34,23 @@ export async function GET(
   return NextResponse.json(serializeProject(project));
 }
 
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const { name } = (await req.json()) as { name?: string };
+  if (!name?.trim()) {
+    return NextResponse.json({ error: "name is required" }, { status: 400 });
+  }
+
+  await prisma.project.update({
+    where: { id: params.id },
+    data: { name: name.trim() },
+  });
+
+  return NextResponse.json({ ok: true });
+}
+
 export async function DELETE(
   _req: NextRequest,
   { params }: { params: { id: string } }
