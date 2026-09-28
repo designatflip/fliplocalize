@@ -247,7 +247,7 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
       </div>
 
       {suggestError && (
-        <div className="mt-4 flex items-center justify-between rounded-md bg-rose-50 px-3 py-2 text-sm text-rose-700">
+        <div className="fixed bottom-4 right-4 z-[60] flex max-w-sm items-start justify-between gap-3 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700 shadow-lg">
           <span>{suggestError}</span>
           <button onClick={() => setSuggestError(null)} className="text-rose-400 hover:text-rose-600">✕</button>
         </div>

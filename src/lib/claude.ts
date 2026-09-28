@@ -168,7 +168,10 @@ export async function suggestTranslation(input: SuggestTranslationInput): Promis
     },
     body: JSON.stringify({
       model,
-      max_tokens: 500,
+      // Thinking is on by default; a small cap let it consume the whole budget on some strings,
+      // leaving no room for the translation itself (stop_reason: max_tokens, no text block).
+      max_tokens: 4096,
+      output_config: { effort: "low" },
       system: [{ type: "text", text: buildSystemPrompt(input), cache_control: { type: "ephemeral" } }],
       messages: [{ role: "user", content: buildUserPrompt(input) }],
     }),
@@ -181,8 +184,16 @@ export async function suggestTranslation(input: SuggestTranslationInput): Promis
   }
 
   const data = await res.json();
-  const raw = data.content?.[0]?.text?.trim();
-  if (!raw) throw new Error("Anthropic API returned an empty response");
+  const textBlock = (data.content as { type: string; text?: string }[] | undefined)?.find(
+    (b) => b.type === "text" && b.text?.trim()
+  );
+  const raw = textBlock?.text?.trim();
+  if (!raw) {
+    const blockTypes = (data.content ?? []).map((b: { type: string }) => b.type).join(", ") || "none";
+    throw new Error(
+      `Claude returned no text (stop_reason: ${data.stop_reason ?? "unknown"}, content blocks: ${blockTypes})`
+    );
+  }
 
   return { text: stripWrappingQuotes(raw), model };
 }
