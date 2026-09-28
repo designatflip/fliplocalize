@@ -2,6 +2,7 @@
 
 import type { StringKeyDTO } from "@/lib/types";
 import { StatusBadge, ChangePill, AiBadge } from "./StatusBadge";
+import AutoGrowTextarea from "./AutoGrowTextarea";
 
 interface Props {
   keys: StringKeyDTO[];
@@ -81,14 +82,14 @@ export default function StringTable({
                 const suggestDisabled = suggesting || t.status === "approved" || t.status === "exported";
                 return (
                   <td key={locale} className="px-3 py-2">
-                    <textarea
+                    <AutoGrowTextarea
                       key={`${t.id}-${t.updatedAt}`}
                       defaultValue={t.text}
                       onBlur={(e) => {
                         if (e.target.value !== t.text) onTranslationPatch(t.id, { text: e.target.value });
                       }}
                       rows={2}
-                      className={`w-full resize-none rounded-md border p-1.5 text-sm ${
+                      className={`w-full rounded-md border p-1.5 text-sm ${
                         overLimit ? "border-rose-400 bg-rose-50" : "border-slate-200"
                       }`}
                     />

@@ -9,6 +9,7 @@ import ImportModal from "./ImportModal";
 import AdaptationPanel from "./AdaptationPanel";
 import GlossaryPanel from "./GlossaryPanel";
 import AutoTranslateModal from "./AutoTranslateModal";
+import ResetModal from "./ResetModal";
 
 const CURRENT_USER = "payment_design@flip.id";
 const CHANGE_FILTERS = ["all", "new", "changed", "removed"] as const;
@@ -22,6 +23,7 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
   const [showAdaptation, setShowAdaptation] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
   const [showAutoTranslate, setShowAutoTranslate] = useState(false);
+  const [showReset, setShowReset] = useState(false);
   const [suggestingIds, setSuggestingIds] = useState<Set<string>>(new Set());
   const [suggestError, setSuggestError] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -215,6 +217,12 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
           >
             ✨ Auto-translate
           </button>
+          <button
+            onClick={() => setShowReset(true)}
+            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-rose-600 hover:bg-rose-50"
+          >
+            Reset
+          </button>
           <div className="group relative">
             <button className="rounded-md bg-brand-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-600">
               Export ▾
@@ -320,6 +328,17 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
           terms={project.glossaryTerms}
           onClose={() => setShowGlossary(false)}
           onChange={load}
+        />
+      )}
+
+      {showReset && (
+        <ResetModal
+          projectId={projectId}
+          keys={project.keys}
+          targetLocales={project.targetLocales}
+          requestedBy={CURRENT_USER}
+          onClose={() => setShowReset(false)}
+          onDone={load}
         />
       )}
 

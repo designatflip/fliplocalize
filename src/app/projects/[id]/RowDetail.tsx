@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { StringKeyDTO, TranslationStatus } from "@/lib/types";
 import { STATUS_ORDER, STATUS_LABEL } from "@/lib/types";
 import { StatusBadge, AiBadge } from "./StatusBadge";
+import AutoGrowTextarea from "./AutoGrowTextarea";
 
 interface Props {
   keyEntry: StringKeyDTO;
@@ -62,7 +63,7 @@ export default function RowDetail({
           <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">
             Reference (existing English)
           </label>
-          <textarea
+          <AutoGrowTextarea
             defaultValue={keyEntry.referenceText ?? ""}
             onBlur={(e) => onKeyPatch({ referenceText: e.target.value || null })}
             rows={2}
@@ -102,7 +103,7 @@ export default function RowDetail({
           <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">
             Notes (context, since design files aren&apos;t always available)
           </label>
-          <textarea
+          <AutoGrowTextarea
             defaultValue={keyEntry.notes ?? ""}
             onBlur={(e) => onKeyPatch({ notes: e.target.value || null })}
             rows={2}
@@ -143,7 +144,7 @@ export default function RowDetail({
                 </div>
               </div>
 
-              <textarea
+              <AutoGrowTextarea
                 key={`${t.id}-${t.updatedAt}`}
                 defaultValue={t.text}
                 onBlur={(e) => onTranslationPatch(t.id, { text: e.target.value })}
