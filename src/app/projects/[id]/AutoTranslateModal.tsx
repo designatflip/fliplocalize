@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import type { StringKeyDTO } from "@/lib/types";
 
 interface Props {
   projectId: string;
+  keys: StringKeyDTO[];
   targetLocales: string[];
   onClose: () => void;
   onDone: () => void;
@@ -23,12 +25,22 @@ interface Totals {
 
 const MAX_ITERATIONS = 200; // safety valve against a pathological infinite loop
 
-export default function AutoTranslateModal({ projectId, targetLocales, onClose, onDone }: Props) {
+export default function AutoTranslateModal({ projectId, keys, targetLocales, onClose, onDone }: Props) {
   const [locale, setLocale] = useState(targetLocales[0] ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState<(Totals & { remaining: number }) | null>(null);
   const [result, setResult] = useState<{ summary: Totals; errors: string[] } | null>(null);
+
+  let emptyCount = 0;
+  let filledCount = 0;
+  for (const k of keys) {
+    if (k.removedAt) continue;
+    const t = k.translations.find((tr) => tr.locale === locale);
+    if (!t) continue;
+    if (t.text === "" && t.status === "untranslated") emptyCount++;
+    else filledCount++;
+  }
 
   async function handleRun() {
     setError(null);
@@ -103,12 +115,10 @@ export default function AutoTranslateModal({ projectId, targetLocales, onClose, 
           </div>
         ) : (
           <div className="mt-4 space-y-4">
-            <p className="text-xs text-slate-500">
-              Generates AI first-draft translations (marked as drafts, requiring review) for every string
-              in the selected locale that&apos;s still untranslated, using Flip&apos;s glossary and writing
-              guidelines as context. Strings that already have any text or a status past
-              &ldquo;untranslated&rdquo; are never touched. Runs in small batches, so large projects are
-              processed progressively rather than in one long request.
+            <p className="text-sm text-slate-600">
+              Writes AI first drafts, using Flip&apos;s glossary and writing guidelines, for strings that
+              are <strong>still empty</strong>. Anything that already has a translation — including AI
+              drafts, manual edits, and approved ones — is <strong>never overwritten</strong>.
             </p>
             <div>
               <label className="block text-sm font-medium text-slate-700">Locale</label>
@@ -123,6 +133,14 @@ export default function AutoTranslateModal({ projectId, targetLocales, onClose, 
                 ))}
               </select>
             </div>
+            <ul className="rounded-md bg-slate-50 p-3 text-sm space-y-1">
+              <li>
+                <strong>{emptyCount}</strong> empty — will be translated
+              </li>
+              <li className="text-slate-500">
+                <strong>{filledCount}</strong> already translated — left as is
+              </li>
+            </ul>
             {progress && (
               <p className="text-xs text-slate-500">
                 Translated {progress.suggested} so far, {progress.remaining} remaining…
@@ -131,10 +149,14 @@ export default function AutoTranslateModal({ projectId, targetLocales, onClose, 
             {error && <p className="text-sm text-rose-600">{error}</p>}
             <button
               onClick={handleRun}
-              disabled={loading || !locale}
+              disabled={loading || !locale || emptyCount === 0}
               className="w-full rounded-md bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:opacity-50"
             >
-              {loading ? "Generating…" : "Run auto-translate"}
+              {loading
+                ? "Generating…"
+                : emptyCount === 0
+                  ? "Nothing to translate"
+                  : `Translate ${emptyCount} empty string${emptyCount === 1 ? "" : "s"}`}
             </button>
           </div>
         )}

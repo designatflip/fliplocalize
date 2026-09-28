@@ -345,6 +345,7 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
       {showAutoTranslate && (
         <AutoTranslateModal
           projectId={projectId}
+          keys={project.keys}
           targetLocales={project.targetLocales}
           onClose={() => setShowAutoTranslate(false)}
           onDone={load}
