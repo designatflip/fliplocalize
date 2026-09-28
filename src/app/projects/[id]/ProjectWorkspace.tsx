@@ -59,6 +59,19 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
     });
   }, [project, search, changeFilter]);
 
+  // Stable numbers: a string keeps its number regardless of search or filter (removed strings
+  // are numbered separately so the active list has no gaps).
+  const rowNumbers = useMemo(() => {
+    const numbers = new Map<string, number>();
+    if (!project) return numbers;
+    let active = 0;
+    let removed = 0;
+    for (const k of project.keys) {
+      numbers.set(k.id, k.changeStatus === "removed" ? ++removed : ++active);
+    }
+    return numbers;
+  }, [project]);
+
   const selectedKey = project?.keys.find((k) => k.id === selectedKeyId) ?? null;
 
   async function patchKey(keyId: string, patch: Record<string, unknown>) {
@@ -279,6 +292,7 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
       <div className="mt-4">
         <StringTable
           keys={filteredKeys}
+          rowNumbers={rowNumbers}
           targetLocales={project.targetLocales}
           onOpenRow={setSelectedKeyId}
           onTranslationPatch={(id, patch) => patchTranslation(id, patch)}

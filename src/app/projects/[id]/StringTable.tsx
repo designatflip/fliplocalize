@@ -6,6 +6,7 @@ import AutoGrowTextarea from "./AutoGrowTextarea";
 
 interface Props {
   keys: StringKeyDTO[];
+  rowNumbers: Map<string, number>;
   targetLocales: string[];
   onOpenRow: (keyId: string) => void;
   onTranslationPatch: (translationId: string, patch: { text?: string }) => void;
@@ -15,6 +16,7 @@ interface Props {
 
 export default function StringTable({
   keys,
+  rowNumbers,
   targetLocales,
   onOpenRow,
   onTranslationPatch,
@@ -34,6 +36,7 @@ export default function StringTable({
       <table className="w-full min-w-[900px] border-collapse text-sm">
         <thead>
           <tr className="border-b border-slate-200 bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <th className="w-12 px-3 py-2 text-right">#</th>
             <th className="w-64 px-3 py-2">Key</th>
             <th className="w-56 px-3 py-2">Source</th>
             {targetLocales.map((locale) => (
@@ -49,6 +52,9 @@ export default function StringTable({
                 k.changeStatus === "removed" ? "opacity-50" : ""
               }`}
             >
+              <td className="px-3 py-2 text-right font-mono text-xs tabular-nums text-slate-400">
+                {rowNumbers.get(k.id)}
+              </td>
               <td className="px-3 py-2">
                 <button
                   onClick={() => onOpenRow(k.id)}
