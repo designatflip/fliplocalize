@@ -22,7 +22,9 @@ interface Props {
   onTranslationPatch: (translationId: string, patch: { text?: string; status?: string; reviewer?: string | null }) => void;
   onAddComment: (translationId: string, text: string) => void;
   onSuggest: (translationId: string) => void;
+  onUseReference: (translationId: string, text: string) => void;
   suggestingIds: Set<string>;
+  usingReferenceIds: Set<string>;
 }
 
 export default function RowDetail({
@@ -34,7 +36,9 @@ export default function RowDetail({
   onTranslationPatch,
   onAddComment,
   onSuggest,
+  onUseReference,
   suggestingIds,
+  usingReferenceIds,
 }: Props) {
   const [commentDrafts, setCommentDrafts] = useState<Record<string, string>>({});
   const [showHistoryFor, setShowHistoryFor] = useState<string | null>(null);
@@ -132,7 +136,10 @@ export default function RowDetail({
           if (!t) return null;
           const overLimit = keyEntry.charLimit != null && t.text.length > keyEntry.charLimit;
           const suggesting = suggestingIds.has(t.id);
-          const suggestDisabled = suggesting || t.status === "approved" || t.status === "exported";
+          const usingReference = usingReferenceIds.has(t.id);
+          const finished = t.status === "approved" || t.status === "exported";
+          const suggestDisabled = suggesting || usingReference || finished;
+          const useReferenceDisabled = usingReference || suggesting || finished;
 
           return (
             <section key={locale} className="rounded-lg border border-slate-200 p-4">
@@ -168,6 +175,16 @@ export default function RowDetail({
                   >
                     {suggesting ? "Suggesting…" : "✨ Suggest"}
                   </button>
+                  {keyEntry.referenceText && (
+                    <button
+                      onClick={() => onUseReference(t.id, keyEntry.referenceText as string)}
+                      disabled={useReferenceDisabled}
+                      title="Use the existing English reference text for this field"
+                      className="text-brand-600 hover:underline disabled:text-slate-300"
+                    >
+                      {usingReference ? "Using…" : "📋 Use existing"}
+                    </button>
+                  )}
                   <button
                     onClick={() => setShowHistoryFor(showHistoryFor === t.id ? null : t.id)}
                     className="text-brand-600 hover:underline"

@@ -9,9 +9,11 @@ interface Props {
   rowNumbers: Map<string, number>;
   targetLocales: string[];
   onOpenRow: (keyId: string) => void;
-  onTranslationPatch: (translationId: string, patch: { text?: string }) => void;
+  onTranslationPatch: (translationId: string, patch: { text?: string; status?: string }) => void;
   onSuggest: (translationId: string) => void;
+  onUseReference: (translationId: string, text: string) => void;
   suggestingIds: Set<string>;
+  usingReferenceIds: Set<string>;
 }
 
 export default function StringTable({
@@ -21,7 +23,9 @@ export default function StringTable({
   onOpenRow,
   onTranslationPatch,
   onSuggest,
+  onUseReference,
   suggestingIds,
+  usingReferenceIds,
 }: Props) {
   if (keys.length === 0) {
     return (
@@ -85,7 +89,10 @@ export default function StringTable({
                 if (!t) return <td key={locale} className="px-3 py-2 text-xs text-slate-300">—</td>;
                 const overLimit = k.charLimit != null && t.text.length > k.charLimit;
                 const suggesting = suggestingIds.has(t.id);
-                const suggestDisabled = suggesting || t.status === "approved" || t.status === "exported";
+                const usingReference = usingReferenceIds.has(t.id);
+                const finished = t.status === "approved" || t.status === "exported";
+                const suggestDisabled = suggesting || usingReference || finished;
+                const useReferenceDisabled = usingReference || suggesting || finished;
                 return (
                   <td key={locale} className="px-3 py-2">
                     <AutoGrowTextarea
@@ -110,14 +117,26 @@ export default function StringTable({
                         </span>
                       )}
                     </div>
-                    <button
-                      onClick={() => onSuggest(t.id)}
-                      disabled={suggestDisabled}
-                      title="Suggest an AI first-draft translation"
-                      className="mt-1 text-[10px] text-brand-600 hover:underline disabled:text-slate-300"
-                    >
-                      {suggesting ? "Suggesting…" : "✨ Suggest"}
-                    </button>
+                    <div className="mt-1 flex items-center gap-2">
+                      <button
+                        onClick={() => onSuggest(t.id)}
+                        disabled={suggestDisabled}
+                        title="Suggest an AI first-draft translation"
+                        className="text-[10px] text-brand-600 hover:underline disabled:text-slate-300"
+                      >
+                        {suggesting ? "Suggesting…" : "✨ Suggest"}
+                      </button>
+                      {k.referenceText && (
+                        <button
+                          onClick={() => onUseReference(t.id, k.referenceText as string)}
+                          disabled={useReferenceDisabled}
+                          title="Use the existing English reference text for this field"
+                          className="text-[10px] text-brand-600 hover:underline disabled:text-slate-300"
+                        >
+                          {usingReference ? "Using…" : "📋 Use existing"}
+                        </button>
+                      )}
+                    </div>
                   </td>
                 );
               })}

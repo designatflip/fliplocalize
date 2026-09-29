@@ -25,9 +25,11 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
   const [showAutoTranslate, setShowAutoTranslate] = useState(false);
   const [showReset, setShowReset] = useState(false);
   const [suggestingIds, setSuggestingIds] = useState<Set<string>>(new Set());
+  const [usingReferenceIds, setUsingReferenceIds] = useState<Set<string>>(new Set());
   const [suggestError, setSuggestError] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [editingName, setEditingName] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const load = useCallback(() => {
     setLoadError(null);
@@ -93,6 +95,25 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
       body: JSON.stringify({ ...patch, by: CURRENT_USER }),
     });
     load();
+  }
+
+  function flashSuccess(message: string) {
+    setSuccessMessage(message);
+    setTimeout(() => setSuccessMessage((current) => (current === message ? null : current)), 3000);
+  }
+
+  async function useReferenceText(translationId: string, text: string) {
+    setUsingReferenceIds((prev) => new Set(prev).add(translationId));
+    try {
+      await patchTranslation(translationId, { text, status: "draft" });
+      flashSuccess("Existing English copy added to the field.");
+    } finally {
+      setUsingReferenceIds((prev) => {
+        const next = new Set(prev);
+        next.delete(translationId);
+        return next;
+      });
+    }
   }
 
   async function suggestOne(translationId: string) {
@@ -266,6 +287,13 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
         </div>
       )}
 
+      {successMessage && (
+        <div className="fixed bottom-16 right-4 z-[60] flex max-w-sm items-start justify-between gap-3 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700 shadow-lg">
+          <span>{successMessage}</span>
+          <button onClick={() => setSuccessMessage(null)} className="text-emerald-400 hover:text-emerald-600">✕</button>
+        </div>
+      )}
+
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <input
           value={search}
@@ -297,7 +325,9 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
           onOpenRow={setSelectedKeyId}
           onTranslationPatch={(id, patch) => patchTranslation(id, patch)}
           onSuggest={suggestOne}
+          onUseReference={useReferenceText}
           suggestingIds={suggestingIds}
+          usingReferenceIds={usingReferenceIds}
         />
       </div>
 
@@ -311,7 +341,9 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
           onTranslationPatch={(id, patch) => patchTranslation(id, patch)}
           onAddComment={addComment}
           onSuggest={suggestOne}
+          onUseReference={useReferenceText}
           suggestingIds={suggestingIds}
+          usingReferenceIds={usingReferenceIds}
         />
       )}
 
