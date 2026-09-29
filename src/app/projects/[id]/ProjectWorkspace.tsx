@@ -294,7 +294,7 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
         </div>
       )}
 
-      <div className="mt-6 flex flex-wrap items-center gap-3">
+      <div className="sticky top-0 z-30 mt-6 flex flex-wrap items-center gap-3 border-b border-slate-200 bg-slate-50 py-3">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
