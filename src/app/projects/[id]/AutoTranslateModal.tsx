@@ -85,22 +85,22 @@ export default function AutoTranslateModal({ projectId, keys, targetLocales, onC
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
+      <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">✨ Auto-translate untranslated strings</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">✕</button>
+          <button onClick={onClose} className="text-neutral-400 hover:text-neutral-600">✕</button>
         </div>
 
         {result ? (
           <div className="mt-4 space-y-3">
-            <p className="text-sm text-slate-600">Auto-translate complete for {locale}.</p>
-            <ul className="rounded-md bg-slate-50 p-3 text-sm space-y-1">
+            <p className="text-sm text-neutral-600">Auto-translate complete for {locale}.</p>
+            <ul className="rounded-xl bg-neutral-50 p-3 text-sm space-y-1">
               <li>✨ Suggested: <strong>{result.summary.suggested}</strong></li>
               <li>⚠️ Failed: <strong>{result.summary.failed}</strong></li>
-              <li className="text-slate-400">Attempted {result.summary.attempted} strings</li>
+              <li className="text-neutral-400">Attempted {result.summary.attempted} strings</li>
             </ul>
             {result.errors.length > 0 && (
-              <ul className="max-h-32 overflow-y-auto rounded-md bg-rose-50 p-2 text-xs text-rose-600 space-y-0.5">
+              <ul className="max-h-32 overflow-y-auto rounded-xl bg-rose-50 p-2 text-xs text-rose-600 space-y-0.5">
                 {result.errors.map((e, i) => (
                   <li key={i}>{e}</li>
                 ))}
@@ -108,41 +108,41 @@ export default function AutoTranslateModal({ projectId, keys, targetLocales, onC
             )}
             <button
               onClick={onClose}
-              className="w-full rounded-md bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600"
+              className="w-full rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600"
             >
               Done
             </button>
           </div>
         ) : (
           <div className="mt-4 space-y-4">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-neutral-600">
               Writes AI first drafts, using Flip&apos;s glossary and writing guidelines, for strings that
               are <strong>still empty</strong>. Anything that already has a translation — including AI
               drafts, manual edits, and approved ones — is <strong>never overwritten</strong>.
             </p>
             <div>
-              <label className="block text-sm font-medium text-slate-700">Locale</label>
+              <label className="block text-sm font-medium text-neutral-700">Locale</label>
               <select
                 value={locale}
                 onChange={(e) => setLocale(e.target.value)}
                 disabled={loading}
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-50"
+                className="mt-1 w-full rounded-xl border border-neutral-300 px-3 py-1.5 text-sm disabled:opacity-50"
               >
                 {targetLocales.map((l) => (
                   <option key={l} value={l}>{l}</option>
                 ))}
               </select>
             </div>
-            <ul className="rounded-md bg-slate-50 p-3 text-sm space-y-1">
+            <ul className="rounded-xl bg-neutral-50 p-3 text-sm space-y-1">
               <li>
                 <strong>{emptyCount}</strong> empty — will be translated
               </li>
-              <li className="text-slate-500">
+              <li className="text-neutral-500">
                 <strong>{filledCount}</strong> already translated — left as is
               </li>
             </ul>
             {progress && (
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-neutral-500">
                 Translated {progress.suggested} so far, {progress.remaining} remaining…
               </p>
             )}
@@ -150,7 +150,7 @@ export default function AutoTranslateModal({ projectId, keys, targetLocales, onC
             <button
               onClick={handleRun}
               disabled={loading || !locale || emptyCount === 0}
-              className="w-full rounded-md bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:opacity-50"
+              className="w-full rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:opacity-50"
             >
               {loading
                 ? "Generating…"

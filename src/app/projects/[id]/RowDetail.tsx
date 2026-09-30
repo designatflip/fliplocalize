@@ -44,67 +44,67 @@ export default function RowDetail({
   const [showHistoryFor, setShowHistoryFor] = useState<string | null>(null);
 
   return (
-    <div className="fixed inset-y-0 right-0 z-40 w-full max-w-2xl overflow-y-auto border-l border-slate-200 bg-white shadow-xl">
-      <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
+    <div className="fixed inset-y-0 right-0 z-40 w-full max-w-2xl overflow-y-auto border-l border-neutral-200 bg-white shadow-xl">
+      <div className="sticky top-0 z-10 flex items-center justify-between border-b border-neutral-200 bg-white px-6 py-4">
         <div>
-          <h2 className="font-mono text-sm font-semibold text-slate-700">{keyEntry.key}</h2>
-          <p className="text-xs text-slate-400">
+          <h2 className="font-mono text-sm font-semibold text-neutral-700">{keyEntry.key}</h2>
+          <p className="text-xs text-neutral-400">
             Last changed {new Date(keyEntry.lastChangedAt).toLocaleString()}
           </p>
         </div>
-        <button onClick={onClose} className="text-slate-400 hover:text-slate-600">✕</button>
+        <button onClick={onClose} className="text-neutral-400 hover:text-neutral-600">✕</button>
       </div>
 
       <div className="px-6 py-5 space-y-6">
         <section>
-          <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">
+          <label className="block text-xs font-semibold uppercase tracking-wide text-neutral-400">
             Source ({"source"})
           </label>
-          <p className="mt-1 rounded-md bg-slate-50 p-3 text-sm">{keyEntry.sourceText}</p>
+          <p className="mt-1 rounded-xl bg-neutral-50 p-3 text-sm">{keyEntry.sourceText}</p>
         </section>
 
         <section>
-          <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">
+          <label className="block text-xs font-semibold uppercase tracking-wide text-neutral-400">
             Reference (existing English)
           </label>
           <AutoGrowTextarea
             defaultValue={keyEntry.referenceText ?? ""}
             onBlur={(e) => onKeyPatch({ referenceText: e.target.value || null })}
             rows={2}
-            className="mt-1 w-full rounded-md border border-slate-300 p-3 text-sm"
+            className="mt-1 w-full rounded-xl border border-neutral-300 p-3 text-sm"
           />
         </section>
 
         <section className="grid grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">Screen</label>
+            <label className="block text-xs font-semibold uppercase tracking-wide text-neutral-400">Screen</label>
             <input
               defaultValue={keyEntry.screen ?? ""}
               onBlur={(e) => onKeyPatch({ screen: e.target.value || null })}
-              className="mt-1 w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
+              className="mt-1 w-full rounded-xl border border-neutral-300 px-2 py-1.5 text-sm"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">Component</label>
+            <label className="block text-xs font-semibold uppercase tracking-wide text-neutral-400">Component</label>
             <input
               defaultValue={keyEntry.component ?? ""}
               onBlur={(e) => onKeyPatch({ component: e.target.value || null })}
-              className="mt-1 w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
+              className="mt-1 w-full rounded-xl border border-neutral-300 px-2 py-1.5 text-sm"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">Char limit</label>
+            <label className="block text-xs font-semibold uppercase tracking-wide text-neutral-400">Char limit</label>
             <input
               type="number"
               defaultValue={keyEntry.charLimit ?? ""}
               onBlur={(e) => onKeyPatch({ charLimit: e.target.value ? Number(e.target.value) : null })}
-              className="mt-1 w-full rounded-md border border-slate-300 px-2 py-1.5 text-sm"
+              className="mt-1 w-full rounded-xl border border-neutral-300 px-2 py-1.5 text-sm"
             />
           </div>
         </section>
 
         <section>
-          <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">
+          <label className="block text-xs font-semibold uppercase tracking-wide text-neutral-400">
             Notes (context, since design files aren&apos;t always available)
           </label>
           <AutoGrowTextarea
@@ -112,16 +112,16 @@ export default function RowDetail({
             onBlur={(e) => onKeyPatch({ notes: e.target.value || null })}
             rows={2}
             placeholder="e.g. Appears after user reviews amount + recipient"
-            className="mt-1 w-full rounded-md border border-slate-300 p-3 text-sm"
+            className="mt-1 w-full rounded-xl border border-neutral-300 p-3 text-sm"
           />
         </section>
 
         {keyEntry.placeholders.length > 0 && (
           <section>
-            <label className="block text-xs font-semibold uppercase tracking-wide text-slate-400">Placeholders</label>
+            <label className="block text-xs font-semibold uppercase tracking-wide text-neutral-400">Placeholders</label>
             <div className="mt-1 flex flex-wrap gap-1.5">
               {keyEntry.placeholders.map((p) => (
-                <span key={p} className="rounded bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-600">
+                <span key={p} className="rounded bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-600">
                   {p}
                 </span>
               ))}
@@ -129,7 +129,7 @@ export default function RowDetail({
           </section>
         )}
 
-        <hr className="border-slate-200" />
+        <hr className="border-neutral-200" />
 
         {targetLocales.map((locale) => {
           const t = keyEntry.translations.find((tr) => tr.locale === locale);
@@ -142,7 +142,7 @@ export default function RowDetail({
           const useReferenceDisabled = usingReference || suggesting || finished;
 
           return (
-            <section key={locale} className="rounded-lg border border-slate-200 p-4">
+            <section key={locale} className="rounded-xl border border-neutral-200 p-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-semibold">{locale}</span>
                 <div className="flex items-center gap-1.5">
@@ -156,12 +156,12 @@ export default function RowDetail({
                 defaultValue={t.text}
                 onBlur={(e) => onTranslationPatch(t.id, { text: e.target.value })}
                 rows={2}
-                className={`mt-2 w-full rounded-md border p-3 text-sm ${
-                  overLimit ? "border-rose-400 bg-rose-50" : "border-slate-300"
+                className={`mt-2 w-full rounded-xl border p-3 text-sm ${
+                  overLimit ? "border-rose-400 bg-rose-50" : "border-neutral-300"
                 }`}
               />
               <div className="mt-1 flex items-center justify-between text-xs">
-                <span className={overLimit ? "font-medium text-rose-600" : "text-slate-400"}>
+                <span className={overLimit ? "font-medium text-rose-600" : "text-neutral-400"}>
                   {t.text.length}
                   {keyEntry.charLimit != null ? ` / ${keyEntry.charLimit}` : ""} chars
                   {overLimit ? " — over limit" : ""}
@@ -171,7 +171,7 @@ export default function RowDetail({
                     onClick={() => onSuggest(t.id)}
                     disabled={suggestDisabled}
                     title="Suggest an AI first-draft translation"
-                    className="text-brand-600 hover:underline disabled:text-slate-300"
+                    className="text-brand-600 hover:underline disabled:text-neutral-300"
                   >
                     {suggesting ? "Suggesting…" : "✨ Suggest"}
                   </button>
@@ -180,7 +180,7 @@ export default function RowDetail({
                       onClick={() => onUseReference(t.id, keyEntry.referenceText as string)}
                       disabled={useReferenceDisabled}
                       title="Use the existing English reference text for this field"
-                      className="text-brand-600 hover:underline disabled:text-slate-300"
+                      className="text-brand-600 hover:underline disabled:text-neutral-300"
                     >
                       {usingReference ? "Using…" : "📋 Use existing"}
                     </button>
@@ -195,11 +195,11 @@ export default function RowDetail({
               </div>
 
               {showHistoryFor === t.id && (
-                <ul className="mt-2 space-y-1 rounded-md bg-slate-50 p-2 text-xs">
-                  {t.history.length === 0 && <li className="text-slate-400">No history yet.</li>}
+                <ul className="mt-2 space-y-1 rounded-xl bg-neutral-50 p-2 text-xs">
+                  {t.history.length === 0 && <li className="text-neutral-400">No history yet.</li>}
                   {t.history.map((h) => (
-                    <li key={h.id} className="text-slate-500">
-                      <span className="font-medium text-slate-600">{h.by ?? "unknown"}</span>{" "}
+                    <li key={h.id} className="text-neutral-500">
+                      <span className="font-medium text-neutral-600">{h.by ?? "unknown"}</span>{" "}
                       · {new Date(h.at).toLocaleString()} — &ldquo;{h.text}&rdquo;
                     </li>
                   ))}
@@ -207,7 +207,7 @@ export default function RowDetail({
               )}
 
               <div className="mt-3 flex items-center gap-2">
-                <label className="text-xs text-slate-500">Status</label>
+                <label className="text-xs text-neutral-500">Status</label>
                 <select
                   value={t.status}
                   onChange={(e) =>
@@ -216,23 +216,23 @@ export default function RowDetail({
                       ...(e.target.value === "approved" ? { reviewer: currentUser } : {}),
                     })
                   }
-                  className="rounded-md border border-slate-300 px-2 py-1 text-xs"
+                  className="rounded-xl border border-neutral-300 px-2 py-1 text-xs"
                 >
                   {STATUS_ORDER.map((s) => (
                     <option key={s} value={s}>{STATUS_LABEL[s]}</option>
                   ))}
                 </select>
-                {t.reviewer && <span className="text-xs text-slate-400">reviewed by {t.reviewer}</span>}
+                {t.reviewer && <span className="text-xs text-neutral-400">reviewed by {t.reviewer}</span>}
               </div>
 
               <div className="mt-3">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Comments</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400">Comments</p>
                 <ul className="mt-1 space-y-1.5">
                   {t.comments.map((c) => (
-                    <li key={c.id} className="rounded-md bg-slate-50 p-2 text-xs">
-                      <span className="font-medium text-slate-600">{c.author ?? "anon"}</span>{" "}
-                      <span className="text-slate-400">{new Date(c.createdAt).toLocaleString()}</span>
-                      <p className="mt-0.5 text-slate-700">{c.text}</p>
+                    <li key={c.id} className="rounded-xl bg-neutral-50 p-2 text-xs">
+                      <span className="font-medium text-neutral-600">{c.author ?? "anon"}</span>{" "}
+                      <span className="text-neutral-400">{new Date(c.createdAt).toLocaleString()}</span>
+                      <p className="mt-0.5 text-neutral-700">{c.text}</p>
                     </li>
                   ))}
                 </ul>
@@ -241,7 +241,7 @@ export default function RowDetail({
                     value={commentDrafts[t.id] ?? ""}
                     onChange={(e) => setCommentDrafts((prev) => ({ ...prev, [t.id]: e.target.value }))}
                     placeholder="Leave a review comment…"
-                    className="w-full rounded-md border border-slate-300 px-2 py-1.5 text-xs"
+                    className="w-full rounded-xl border border-neutral-300 px-2 py-1.5 text-xs"
                   />
                   <button
                     onClick={() => {
@@ -250,7 +250,7 @@ export default function RowDetail({
                       onAddComment(t.id, text);
                       setCommentDrafts((prev) => ({ ...prev, [t.id]: "" }));
                     }}
-                    className="shrink-0 rounded-md bg-slate-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-700"
+                    className="shrink-0 rounded-xl bg-neutral-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-700"
                   >
                     Comment
                   </button>

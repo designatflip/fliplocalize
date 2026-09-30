@@ -52,25 +52,25 @@ export default function ResetModal({ projectId, keys, targetLocales, requestedBy
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
+      <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Reset translations</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">✕</button>
+          <button onClick={onClose} className="text-neutral-400 hover:text-neutral-600">✕</button>
         </div>
 
         <div className="mt-4 space-y-4">
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-neutral-600">
             Clears every filled translation back to empty and sets its status to Untranslated —
             including Approved and Exported ones. Source text, reference text, context, and comments
             are kept. This can&apos;t be undone from the app.
           </p>
           <div>
-            <label className="block text-sm font-medium text-slate-700">Locale</label>
+            <label className="block text-sm font-medium text-neutral-700">Locale</label>
             <select
               value={locale}
               onChange={(e) => setLocale(e.target.value)}
               disabled={loading}
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-50"
+              className="mt-1 w-full rounded-xl border border-neutral-300 px-3 py-1.5 text-sm disabled:opacity-50"
             >
               <option value={ALL}>All locales</option>
               {targetLocales.map((l) => (
@@ -78,7 +78,7 @@ export default function ResetModal({ projectId, keys, targetLocales, requestedBy
               ))}
             </select>
           </div>
-          <p className="text-sm font-medium text-slate-700">
+          <p className="text-sm font-medium text-neutral-700">
             {filledCount} translation{filledCount === 1 ? "" : "s"} will be reset.
           </p>
           {error && <p className="text-sm text-rose-600">{error}</p>}
@@ -86,14 +86,14 @@ export default function ResetModal({ projectId, keys, targetLocales, requestedBy
             <button
               onClick={onClose}
               disabled={loading}
-              className="w-full rounded-md border border-slate-300 px-4 py-2 text-sm font-medium hover:bg-slate-50 disabled:opacity-50"
+              className="w-full rounded-xl border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-50 disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               onClick={handleReset}
               disabled={loading || filledCount === 0}
-              className="w-full rounded-md bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
+              className="w-full rounded-xl bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-50"
             >
               {loading ? "Resetting…" : "Reset"}
             </button>

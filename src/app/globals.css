@@ -2,22 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Metropolis";
+  src: url("/fonts/Metropolis-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Metropolis";
+  src: url("/fonts/Metropolis-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Metropolis";
+  src: url("/fonts/Metropolis-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Metropolis";
+  src: url("/fonts/Metropolis-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light;
 }
 
 body {
-  @apply bg-slate-50 text-slate-900;
+  @apply bg-[#f5f2eb] text-neutral-900;
 }
 
+/* Two-tone pill with an inset ring, matching Flip's Communication Hub badges. */
 .status-pill {
-  @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap;
+  @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap ring-1 ring-inset;
 }
-.status-untranslated { @apply bg-slate-200 text-slate-600; }
-.status-draft { @apply bg-amber-100 text-amber-700; }
-.status-in_review { @apply bg-blue-100 text-blue-700; }
-.status-approved { @apply bg-emerald-100 text-emerald-700; }
-.status-exported { @apply bg-violet-100 text-violet-700; }
+.status-untranslated { @apply bg-neutral-100 text-neutral-600 ring-neutral-900/10; }
+.status-draft { @apply bg-amber-100 text-amber-900 ring-amber-600/20; }
+.status-in_review { @apply bg-sky-100 text-sky-900 ring-sky-600/20; }
+.status-approved { @apply bg-emerald-100 text-emerald-900 ring-emerald-600/20; }
+.status-exported { @apply bg-violet-100 text-violet-900 ring-violet-600/20; }
 
 .change-pill {
   @apply inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide;
@@ -28,5 +58,5 @@ body {
 .change-unchanged { @apply bg-transparent text-transparent; }
 
 .ai-badge {
-  @apply inline-flex items-center gap-1 rounded-full bg-fuchsia-100 px-2 py-0.5 text-[10px] font-semibold text-fuchsia-700 whitespace-nowrap;
+  @apply inline-flex items-center gap-1 rounded-full bg-fuchsia-100 px-2 py-0.5 text-[10px] font-semibold text-fuchsia-900 ring-1 ring-inset ring-fuchsia-600/20 whitespace-nowrap;
 }

@@ -62,16 +62,16 @@ export default function ImportModal({ projectId, targetLocales, onClose, onImpor
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
+      <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Import JSON</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600">✕</button>
+          <button onClick={onClose} className="text-neutral-400 hover:text-neutral-600">✕</button>
         </div>
 
         {summary ? (
           <div className="mt-4 space-y-3">
-            <p className="text-sm text-slate-600">Import complete.</p>
-            <ul className="rounded-md bg-slate-50 p-3 text-sm space-y-1">
+            <p className="text-sm text-neutral-600">Import complete.</p>
+            <ul className="rounded-xl bg-neutral-50 p-3 text-sm space-y-1">
               <li>🆕 New keys: <strong>{summary.newKeys}</strong></li>
               <li>✏️ Changed keys: <strong>{summary.changedKeys}</strong></li>
               <li>♻️ Revived keys: <strong>{summary.revivedKeys}</strong></li>
@@ -79,25 +79,25 @@ export default function ImportModal({ projectId, targetLocales, onClose, onImpor
               <li>🗑️ Removed keys: <strong>{summary.removedKeys}</strong></li>
               <li>🌐 Translations seeded: <strong>{summary.translationsSeeded}</strong></li>
               {summary.translationsSkipped > 0 && (
-                <li className="text-slate-400">Skipped (already in progress): {summary.translationsSkipped}</li>
+                <li className="text-neutral-400">Skipped (already in progress): {summary.translationsSkipped}</li>
               )}
             </ul>
             <button
               onClick={onClose}
-              className="w-full rounded-md bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600"
+              className="w-full rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600"
             >
               Done
             </button>
           </div>
         ) : (
           <div className="mt-4 space-y-4">
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-neutral-500">
               Upload the source JSON (required). Existing keys will be diffed against this project&apos;s
               current strings — new, changed, and removed keys will be flagged automatically.
             </p>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700">
+              <label className="block text-sm font-medium text-neutral-700">
                 Source JSON <span className="text-rose-500">*</span>
               </label>
               <input
@@ -109,7 +109,7 @@ export default function ImportModal({ projectId, targetLocales, onClose, onImpor
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700">
+              <label className="block text-sm font-medium text-neutral-700">
                 Reference JSON (existing English copy, optional)
               </label>
               <input
@@ -121,12 +121,12 @@ export default function ImportModal({ projectId, targetLocales, onClose, onImpor
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-700">
+              <label className="block text-sm font-medium text-neutral-700">
                 Existing translation JSON per locale (optional)
               </label>
               {targetLocales.map((locale) => (
                 <div key={locale} className="flex items-center gap-2">
-                  <span className="w-20 shrink-0 text-xs text-slate-500">{locale}</span>
+                  <span className="w-20 shrink-0 text-xs text-neutral-500">{locale}</span>
                   <input
                     type="file"
                     accept=".json,application/json"
@@ -144,7 +144,7 @@ export default function ImportModal({ projectId, targetLocales, onClose, onImpor
             <button
               onClick={handleImport}
               disabled={loading}
-              className="w-full rounded-md bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:opacity-50"
+              className="w-full rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 disabled:opacity-50"
             >
               {loading ? "Importing…" : "Import"}
             </button>

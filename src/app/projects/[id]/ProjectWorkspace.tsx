@@ -176,7 +176,7 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
         </div>
       );
     }
-    return <div className="p-10 text-sm text-slate-400">Loading project…</div>;
+    return <div className="p-10 text-sm text-neutral-400">Loading project…</div>;
   }
 
   const activeKeys = project.keys.filter((k) => k.changeStatus !== "removed");
@@ -189,10 +189,23 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
   });
 
   return (
-    <main className="mx-auto max-w-7xl px-6 py-8">
+    <>
+      <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
+        <div className="mx-auto flex max-w-7xl items-center gap-2.5 px-6 py-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="https://flip.id/assets/images/homepage-v2/flip-logo.png" alt="Flip" className="h-7 w-7" />
+          <Link href="/" className="text-sm font-bold text-neutral-900 hover:text-neutral-600">
+            Localize
+          </Link>
+          <span className="text-neutral-300">/</span>
+          <span className="truncate text-sm text-neutral-600">{project.name}</span>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-7xl px-6 py-8">
       <div className="flex items-start justify-between">
         <div>
-          <Link href="/" className="text-xs text-slate-400 hover:text-slate-600">← All projects</Link>
+          <Link href="/" className="text-xs text-neutral-400 hover:text-neutral-600">← All projects</Link>
           {editingName ? (
             <input
               autoFocus
@@ -202,25 +215,25 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
                 if (e.key === "Enter") e.currentTarget.blur();
                 if (e.key === "Escape") setEditingName(false);
               }}
-              className="mt-1 w-full max-w-md rounded-md border border-slate-300 px-2 py-0.5 text-xl font-semibold"
+              className="mt-1 w-full max-w-md rounded-xl border border-neutral-300 px-2 py-0.5 text-xl font-semibold"
             />
           ) : (
             <h1
               onClick={() => setEditingName(true)}
               title="Click to rename"
-              className="mt-1 cursor-text text-xl font-semibold hover:bg-slate-100 rounded-md px-2 -mx-2 py-0.5"
+              className="mt-1 cursor-text text-xl font-semibold hover:bg-neutral-100 rounded-xl px-2 -mx-2 py-0.5"
             >
               {project.name}
             </h1>
           )}
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-xs text-neutral-500">
             {project.sourceLocale} → {project.targetLocales.join(", ")}
             {project.localeGroup ? ` · ${project.localeGroup}` : ""} · {activeKeys.length} keys
           </p>
           <div className="mt-2 flex flex-wrap gap-3">
             {progress.map((p) => (
-              <span key={p.locale} className="text-xs text-slate-500">
-                <span className="font-medium text-slate-700">{p.locale}</span>: {p.approved}/{p.total} approved
+              <span key={p.locale} className="text-xs text-neutral-500">
+                <span className="font-medium text-neutral-700">{p.locale}</span>: {p.approved}/{p.total} approved
               </span>
             ))}
           </div>
@@ -229,39 +242,39 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={() => setShowGlossary(true)}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm hover:bg-slate-50"
+            className="rounded-xl border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-50"
           >
             Glossary
           </button>
           <button
             onClick={() => setShowAdaptation(true)}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm hover:bg-slate-50"
+            className="rounded-xl border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-50"
           >
             Adaptation rules
           </button>
           <button
             onClick={() => setShowImport(true)}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm hover:bg-slate-50"
+            className="rounded-xl border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-50"
           >
             Import
           </button>
           <button
             onClick={() => setShowAutoTranslate(true)}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm hover:bg-slate-50"
+            className="rounded-xl border border-neutral-300 bg-white px-3 py-1.5 text-sm hover:bg-neutral-50"
           >
             ✨ Auto-translate
           </button>
           <button
             onClick={() => setShowReset(true)}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-sm text-rose-600 hover:bg-rose-50"
+            className="rounded-xl border border-neutral-300 bg-white px-3 py-1.5 text-sm text-rose-600 hover:bg-rose-50"
           >
             Reset
           </button>
           <div className="group relative">
-            <button className="rounded-md bg-brand-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-600">
+            <button className="rounded-xl bg-brand-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-600">
               Export ▾
             </button>
-            <div className="invisible absolute right-0 z-20 mt-1 w-56 rounded-md border border-slate-200 bg-white p-1 shadow-lg group-hover:visible">
+            <div className="invisible absolute right-0 z-20 mt-1 w-56 rounded-xl border border-neutral-200 bg-white p-1 shadow-lg group-hover:visible">
               {project.targetLocales.map((locale) => (
                 <div key={locale} className="flex items-center justify-between px-2 py-1.5 text-xs">
                   <span className="font-medium">{locale}</span>
@@ -269,7 +282,7 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
                     <button onClick={() => exportLocale(locale, "approved")} className="text-brand-600 hover:underline">
                       approved
                     </button>
-                    <button onClick={() => exportLocale(locale, "all")} className="text-slate-500 hover:underline">
+                    <button onClick={() => exportLocale(locale, "all")} className="text-neutral-500 hover:underline">
                       all
                     </button>
                   </span>
@@ -281,34 +294,34 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
       </div>
 
       {suggestError && (
-        <div className="fixed bottom-4 right-4 z-[60] flex max-w-sm items-start justify-between gap-3 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700 shadow-lg">
+        <div className="fixed bottom-4 right-4 z-[60] flex max-w-sm items-start justify-between gap-3 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700 shadow-lg">
           <span>{suggestError}</span>
           <button onClick={() => setSuggestError(null)} className="text-rose-400 hover:text-rose-600">✕</button>
         </div>
       )}
 
       {successMessage && (
-        <div className="fixed bottom-16 right-4 z-[60] flex max-w-sm items-start justify-between gap-3 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700 shadow-lg">
+        <div className="fixed bottom-16 right-4 z-[60] flex max-w-sm items-start justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700 shadow-lg">
           <span>{successMessage}</span>
           <button onClick={() => setSuccessMessage(null)} className="text-emerald-400 hover:text-emerald-600">✕</button>
         </div>
       )}
 
-      <div className="sticky top-0 z-30 mt-6 flex flex-wrap items-center gap-3 border-b border-slate-200 bg-slate-50 py-3">
+      <div className="sticky top-[52px] z-30 mt-6 flex flex-wrap items-center gap-3 border-b border-neutral-200 bg-[#f5f2eb] py-3">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search key, source, or reference text…"
-          className="w-72 rounded-md border border-slate-300 px-3 py-1.5 text-sm"
+          className="w-72 rounded-xl border border-neutral-300 px-3 py-1.5 text-sm"
         />
         <div className="flex items-center gap-1.5">
-          <span className="text-xs text-slate-400">Since last import:</span>
+          <span className="text-xs text-neutral-400">Since last import:</span>
           {CHANGE_FILTERS.map((f) => (
             <button
               key={f}
               onClick={() => setChangeFilter(f)}
-              className={`rounded-md px-2.5 py-1 text-xs font-medium capitalize ${
-                changeFilter === f ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              className={`rounded-xl px-2.5 py-1 text-xs font-medium capitalize ${
+                changeFilter === f ? "bg-neutral-800 text-white" : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
               }`}
             >
               {f}
@@ -397,6 +410,7 @@ export default function ProjectWorkspace({ projectId }: { projectId: string }) {
           onDone={load}
         />
       )}
-    </main>
+      </main>
+    </>
   );
 }
